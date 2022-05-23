@@ -5,20 +5,25 @@ using UnityEngine;
 
 public class RigidBodyMovement : MonoBehaviour
 {
+    // Variables and Camera
     public float moveSpeed = 0.25f;
     public float rotationRate = 5f;
     public Camera camera;
+    
+    // Auxiliars
     private bool playingFootstep;
     private AudioSource footstep;
-    private Rigidbody _Rigidbody;
+    private Rigidbody _rigidBody;
     private Vector3 moveInput;
-    private float minAngle = 0f;
-    private float maxAngle = 360f;
+    private bool holdingSomething;
+    private GameObject holdingObject;
 
     private void Start()
      {
          playingFootstep = false;
-         _Rigidbody = GetComponent<Rigidbody>();
+         holdingSomething = false;
+         holdingObject = null;
+         _rigidBody = GetComponent<Rigidbody>();
          footstep = GetComponent<AudioSource>();
      }
 
@@ -37,6 +42,13 @@ public class RigidBodyMovement : MonoBehaviour
  
      private void FixedUpdate()
      {
+         /*foreach(KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
+         {
+             if (Input.GetKey(kcode))
+                 Debug.Log("KeyCode down: " + kcode);
+         }
+         */
+         
          // Rigidbody actions are handled by Unity's physics engine, so you should always mess with
          // rigidbody stuff inside FixedUpdate, this will guarantee consistent physics behaviour.
          
@@ -48,6 +60,11 @@ public class RigidBodyMovement : MonoBehaviour
          var roll = Input.GetAxis("Roll");
          var lastAngle = camera.transform.localRotation;
 
+         if (Input.GetKeyDown(KeyCode.Joystick1Button1))
+         {
+             Grab();
+         }
+
          if (!playingFootstep && (horizontalInput != 0 || verticalInput != 0))
          {
              playingFootstep = true;
@@ -58,7 +75,7 @@ public class RigidBodyMovement : MonoBehaviour
          moveInput = new Vector3(horizontalInput, 0, verticalInput);
          //_Rigidbody.position += moveInput * Time.deltaTime;
          Vector3 moveVector = transform.TransformDirection(moveInput) * moveSpeed;
-         _Rigidbody.velocity = new Vector3(moveVector.x, _Rigidbody.velocity.y, moveVector.z);
+         _rigidBody.velocity = new Vector3(moveVector.x, _rigidBody.velocity.y, moveVector.z);
          //transform.Rotate(0f, Input.GetAxis("Pitch") * rotationRate, 0f, Space.World);
          //transform.Rotate(Input.GetAxis("Roll") * rotationRate,  0f, 0f, Space.Self);
          var pos = transform.position;
@@ -77,5 +94,27 @@ public class RigidBodyMovement : MonoBehaviour
      {
          yield return new WaitForSeconds(0.5f);
          playingFootstep = false;
+     }
+
+     private void Grab()
+     {
+         RaycastHit hit;
+        
+         if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, 2f))
+         {
+             Debug.Log(hit.transform.name + " " + hit.transform.tag);
+             if (!holdingSomething && hit.transform.tag.Contains("WorkingTool"))
+             {
+                 holdingObject = hit.transform.gameObject;
+                 holdingSomething = true;
+                 hit.transform.gameObject.SendMessage("GrabObject");
+             }
+             else if (holdingSomething && hit.transform.tag.Contains("Desk"))
+             {
+                 holdingObject.SendMessage("UngrabObject", hit.point);
+                 holdingObject = null;
+                 holdingSomething = false;
+             }
+         }
      }
 }
