@@ -100,7 +100,7 @@ public class RigidBodyMovement : MonoBehaviour
      {
          RaycastHit hit;
         
-         if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, 2f))
+         if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, 3f))
          {
              Debug.Log(hit.transform.name + " " + hit.transform.tag);
              if (!holdingSomething && hit.transform.tag.Contains("WorkingTool"))
