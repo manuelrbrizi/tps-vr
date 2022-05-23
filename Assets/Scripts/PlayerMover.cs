@@ -17,19 +17,10 @@ public class PlayerMover : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         var horizontalInput = Input.GetAxis("Horizontal");
         var verticalInput = Input.GetAxis("Vertical");
-        var rotation = transform.rotation;
-        var dir = new Vector3(horizontalInput, 0, verticalInput);
-
-        /*if (rotation.y < -90 || rotation.y > 90)
-        {
-            verticalInput *= -1;
-        }*/
-        
-        Debug.Log(horizontalInput + " " + verticalInput);
 
         if (!playingFootstep && (horizontalInput != 0 || verticalInput != 0))
         {
@@ -38,7 +29,7 @@ public class PlayerMover : MonoBehaviour
             StartCoroutine(FootstepCooldown());
         }
         
-        transform.Translate(Vector3.right * Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime, Space.Self);
+        transform.Translate(Vector3.right * horizontalInput * moveSpeed * Time.deltaTime, Space.Self);
         transform.Translate(new Vector3(0f, 0f, verticalInput) * moveSpeed * Time.deltaTime, Space.Self);
         var pos = transform.position;
         transform.position = new Vector3(pos.x, 1.68f, pos.z);
@@ -50,5 +41,17 @@ public class PlayerMover : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         playingFootstep = false;
+    }
+    
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("WE HIT AN OBSTACLE");
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        Debug.Log("COLISION");
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 }
