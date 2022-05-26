@@ -26,34 +26,9 @@ public class RigidBodyMovement : MonoBehaviour
          _rigidBody = GetComponent<Rigidbody>();
          footstep = GetComponent<AudioSource>();
      }
-
-     /*private void Update()
-     {
-         /* To add values to the moveInput property you write "new Vector3 (x, y, z)" and fill those
-         values with the inputs that you would like to use. In my case I used for the X axis
-         Input.GetAxis("Horizontal") to get the input values from the default
-         keys A, D, Left Arrow and Right Arrow and for the Z axis Input.GetAxis("Vertical") to
-         get the default input values from the keys W, S, Up Arrow and Down Arrow.
-         #1#
- 
-         // Try to always get your player inputs in the Update method.
-         
-     }*/
  
      private void FixedUpdate()
      {
-         /*foreach(KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
-         {
-             if (Input.GetKey(kcode))
-                 Debug.Log("KeyCode down: " + kcode);
-         }
-         */
-         
-         // Rigidbody actions are handled by Unity's physics engine, so you should always mess with
-         // rigidbody stuff inside FixedUpdate, this will guarantee consistent physics behaviour.
-         
-         // After this you just simply use your rigidbody position with a += moveInput (like you did) and multiply
-         // that Vector3 by a property I called moveSpeed so that you can control how fast your object should move.
          var horizontalInput = Input.GetAxis("Horizontal");
          var verticalInput = Input.GetAxis("Vertical");
          var pitch = Input.GetAxis("Pitch");
@@ -68,16 +43,16 @@ public class RigidBodyMovement : MonoBehaviour
          if (!playingFootstep && (horizontalInput != 0 || verticalInput != 0))
          {
              playingFootstep = true;
+             float volume = getVolume(Mathf.Abs(horizontalInput), Mathf.Abs(verticalInput));
+             footstep.volume = volume;
+             Debug.Log(volume);
              footstep.Play();
-             StartCoroutine(FootstepCooldown());
+             StartCoroutine(volume <= 0.8f ? FootstepCooldown(0.9f) : FootstepCooldown(0.5f));
          }
          
          moveInput = new Vector3(horizontalInput, 0, verticalInput);
-         //_Rigidbody.position += moveInput * Time.deltaTime;
          Vector3 moveVector = transform.TransformDirection(moveInput) * moveSpeed;
          _rigidBody.velocity = new Vector3(moveVector.x, _rigidBody.velocity.y, moveVector.z);
-         //transform.Rotate(0f, Input.GetAxis("Pitch") * rotationRate, 0f, Space.World);
-         //transform.Rotate(Input.GetAxis("Roll") * rotationRate,  0f, 0f, Space.Self);
          var pos = transform.position;
          transform.position = new Vector3(pos.x, 1.68f, pos.z);
          var xRot = camera.transform.localRotation.x;
@@ -89,10 +64,20 @@ public class RigidBodyMovement : MonoBehaviour
          
          transform.Rotate(0f,  pitch * rotationRate, 0f);
      }
-     
-     private IEnumerator FootstepCooldown()
+
+     private float getVolume(float a, float b)
      {
-         yield return new WaitForSeconds(0.5f);
+         if(a < 0.5f && b < 0.5f)
+         {
+             return 0.8f;
+         }
+
+         return Mathf.Min(a+b, 1);
+     }
+     
+     private IEnumerator FootstepCooldown(float time)
+     {
+         yield return new WaitForSeconds(time);
          playingFootstep = false;
      }
 
@@ -102,7 +87,6 @@ public class RigidBodyMovement : MonoBehaviour
         
          if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, 3f))
          {
-             Debug.Log(hit.transform.name + " " + hit.transform.tag);
              if (!holdingSomething && hit.transform.tag.Contains("WorkingTool"))
              {
                  holdingObject = hit.transform.gameObject;
