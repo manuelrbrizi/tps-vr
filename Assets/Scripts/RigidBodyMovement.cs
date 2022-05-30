@@ -29,6 +29,12 @@ public class RigidBodyMovement : MonoBehaviour
  
      private void FixedUpdate()
      {
+         /*foreach(KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
+         {
+             if (Input.GetKey(kcode))
+                 Debug.Log("KeyCode down: " + kcode);
+         }*/
+         
          var horizontalInput = Input.GetAxis("Horizontal");
          var verticalInput = Input.GetAxis("Vertical");
          var pitch = Input.GetAxis("Pitch");
@@ -37,7 +43,13 @@ public class RigidBodyMovement : MonoBehaviour
 
          if (Input.GetKeyDown(KeyCode.Joystick1Button1))
          {
+             Debug.Log("Grabbing");
              Grab();
+         }
+         
+         if (holdingSomething && Input.GetKeyDown(KeyCode.JoystickButton0))
+         {
+             holdingObject.SendMessage("RotateObject");
          }
 
          if (!playingFootstep && (horizontalInput != 0 || verticalInput != 0))
@@ -45,7 +57,6 @@ public class RigidBodyMovement : MonoBehaviour
              playingFootstep = true;
              float volume = getVolume(Mathf.Abs(horizontalInput), Mathf.Abs(verticalInput));
              footstep.volume = volume;
-             Debug.Log(volume);
              footstep.Play();
              StartCoroutine(volume <= 0.8f ? FootstepCooldown(0.9f) : FootstepCooldown(0.5f));
          }

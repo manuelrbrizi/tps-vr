@@ -7,17 +7,22 @@ public class PickUp : MonoBehaviour
 {
     public AudioSource grabbingSound;
     public AudioSource ungrabbingSound;
-    
     public Transform destination;
+    public Transform mainCamera;
+    
     private Rigidbody _rigidBody;
     private BoxCollider _boxCollider;
     private bool _grabbed;
+    private bool _rotated;
+    private bool _justRotated;
 
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody>();
         _boxCollider = GetComponent<BoxCollider>();
         _grabbed = false;
+        _rotated = false;
+        _justRotated = true;
     }
 
     public void GrabObject()
@@ -42,11 +47,27 @@ public class PickUp : MonoBehaviour
         ungrabbingSound.Play();
     }
 
+    public void RotateObject()
+    {
+        _rotated = !_rotated;
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (!_grabbed) return;
-        transform.rotation = Quaternion.identity;
+        
+        if (_rotated && _justRotated)
+        {
+            transform.Rotate(mainCamera.forward, 135f, Space.World);
+            _justRotated = false;
+        }
+        else if(!_rotated)
+        {
+            transform.rotation = Quaternion.identity;
+            _justRotated = true;
+        }
+        
         transform.position = destination.position;
     }
 }
