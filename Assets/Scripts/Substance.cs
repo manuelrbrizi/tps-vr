@@ -5,16 +5,22 @@ using UnityEngine;
 public class Substance : MonoBehaviour {
 
 	public string name;
+	public float amount;
 	public GameObject tableObj;
 
 	private ReactionsTable table;
+	private MeshRenderer flaskRenderer;
+	private ParticleSystemRenderer particleRenderer;
 
 	void Start(){
-		table = tableObj.GetComponent<ReactionsTable>();
-		//changeSubstanceColor(table.getSubstanceColorOf(this.name));
+		this.table = tableObj.GetComponent<ReactionsTable>();
+		//changeSubstanceColor(table.getSubstanceColorOf(this.name)); //TODO review if it needs to be setup on start, the other object might need to be on Awake()
+		MeshRenderer[] allRenderers = this.GetComponentsInChildren<MeshRenderer>();
+		this.particleRenderer = this.GetComponentInChildren<ParticleSystemRenderer>();
+		this.flaskRenderer = allRenderers[1];
 	}
 
-	public void reactWith(string other){
+	public void reactWith(string other, float addedAmount){
 		Debug.Log(this.name + " has reacted with " + other);
 		//get possible reactions for this substance
 		Dictionary<string, string> possibleReactions = table.getReactionsFor(this.name);
@@ -24,7 +30,7 @@ public class Substance : MonoBehaviour {
 		//check the result of the reaction
 		//nothing happened, return
 		if(newSubstance == this.name) return;
-		//if reaction name is "boom", an explision occurs
+		//if reaction name is "boom", an explosion occurs
 		if(newSubstance == "boom"){
 			explode();
 		//reaction generated new substance
@@ -32,22 +38,34 @@ public class Substance : MonoBehaviour {
 		}else if(newSubstance != null){
 			this.name = newSubstance;
 			changeSubstanceColor(table.getSubstanceColorOf(this.name));
+			changeSubstanceAmount(addedAmount);
 		}
 	}
 
-	private void changeSubstanceColor(Color[] newColor){
-		//grabbing children renderer ignoring parent
-		MeshRenderer[] allRenderers = this.GetComponentsInChildren<MeshRenderer>();
-		MeshRenderer renderer = null;
-		foreach(MeshRenderer m in allRenderers){
-			if(m.gameObject.GetInstanceID() != this.GetInstanceID()){
-				renderer = m;
-			}
+	public void changeSubstanceAmount(float amount) {
+		if(amount > 0){
+			//adding amount
+			this.amount += amount;
+			//liquid overflow, for now, it is not possible,
+			//maybe in the future we can add a split particle
+			if(this.amount > 1f) this.amount = 1;
+		}else{
+			//removing amount
+			this.amount -= amount;
+			if(this.amount < 0) this.amount = 0;
 		}
+		this.flaskRenderer.material.SetFloat("_FillAmount", this.amount);
+	}
+
+	private void changeSubstanceColor(Color[] newColor){
 		//changing properties
-		renderer.material.SetColor("_Tint", newColor[0]);
-		renderer.material.SetColor("_TopColor", newColor[1]);
-		renderer.material.SetFloat("_FillAmount", 0.44f);
+		this.flaskRenderer.material.SetColor("_Tint", newColor[0]);
+		this.flaskRenderer.material.SetColor("_TopColor", newColor[1]);
+		//also change particle's color
+		Material m = Instantiate(this.particleRenderer.material);
+		m.SetColor("_Color", newColor[0]);
+		Destroy(particleRenderer.material);
+		this.particleRenderer.trailMaterial = m;
 	}
 
 

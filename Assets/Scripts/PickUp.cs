@@ -12,6 +12,7 @@ public class PickUp : MonoBehaviour
     
     private Rigidbody _rigidBody;
     private BoxCollider _boxCollider;
+    private ParticleSystem _particles;
     private bool _grabbed;
     private bool _rotated;
     private bool _justRotated;
@@ -20,6 +21,7 @@ public class PickUp : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody>();
         _boxCollider = GetComponent<BoxCollider>();
+	_particles = GetComponentInChildren<ParticleSystem>();
         _grabbed = false;
         _rotated = false;
         _justRotated = true;
@@ -60,7 +62,9 @@ public class PickUp : MonoBehaviour
         if (_rotated && _justRotated)
         {
             transform.Rotate(mainCamera.forward, 135f, Space.World);
+	    //TODO play animation
             _justRotated = false;
+	    this._particles.Play(true);
         }
         else if(!_rotated)
         {

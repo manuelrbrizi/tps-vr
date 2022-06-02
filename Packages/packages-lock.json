@@ -57,14 +57,14 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.4",
+      "version": "1.2.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.postprocessing": {
-      "version": "3.1.1",
+      "version": "3.2.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -134,7 +134,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.5.6",
+      "version": "1.6.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -165,7 +165,7 @@
       }
     },
     "com.unity.xr.legacyinputhelpers": {
-      "version": "2.1.7",
+      "version": "2.1.8",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -175,7 +175,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.management": {
-      "version": "4.0.6",
+      "version": "4.2.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
