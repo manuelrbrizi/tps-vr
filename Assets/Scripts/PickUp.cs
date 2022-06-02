@@ -9,6 +9,8 @@ public class PickUp : MonoBehaviour
     public AudioSource ungrabbingSound;
     public Transform destination;
     public Transform mainCamera;
+	
+	public float _rotationAngle = -60;
     
     private Rigidbody _rigidBody;
     private BoxCollider _boxCollider;
@@ -41,6 +43,11 @@ public class PickUp : MonoBehaviour
     public void UngrabObject(Vector3 point)
     {
         if (!_grabbed) return;
+		if(_rotated){
+			_rotated = !_rotated;
+			transform.rotation = Quaternion.identity;
+			this._particles.Stop(true);
+		}
         _grabbed = false;
         _boxCollider.enabled = true;
         transform.position = new Vector3(point.x, 1.1f, point.z);
@@ -52,26 +59,44 @@ public class PickUp : MonoBehaviour
     public void RotateObject()
     {
         _rotated = !_rotated;
+		interactWithSubstance();
     }
+
+	private void interactWithSubstance(){
+		Vector3 raycastDir = new Vector3(0,-0.5f,-0.1f);
+		Debug.DrawRay(transform.position,  raycastDir * 1f, Color.red, 2);
+		RaycastHit hit;
+		if(Physics.Raycast(transform.position, raycastDir * 1f, out hit, 1f)){
+			if(hit.collider.isTrigger && hit.collider.gameObject.tag == "Substance"){
+				//get this object's component
+				Substance sub = GetComponent<Substance>();
+				//if no substance on reactive, ignore
+				if(sub.amount == 0){
+					Debug.Log("No amount to react");
+					return;
+				}
+				//react with container's substance
+				hit.collider.gameObject.SendMessage("ReactWith", sub);
+				//empty bottle
+				sub.changeSubstanceAmount(-99f);
+			}
+		}
+	}
 
     // Update is called once per frame
     void Update()
     {
         if (!_grabbed) return;
-        
-        if (_rotated && _justRotated)
-        {
-            transform.Rotate(mainCamera.forward, 135f, Space.World);
-	    //TODO play animation
+        if (_rotated && _justRotated) {
+			transform.Rotate(new Vector3(_rotationAngle,_rotationAngle + 45,_rotationAngle), Space.World);
             _justRotated = false;
 	    this._particles.Play(true);
-        }
-        else if(!_rotated)
+        } else if(!_rotated)
         {
             transform.rotation = Quaternion.identity;
             _justRotated = true;
+	    this._particles.Stop(true);
         }
-        
         transform.position = destination.position;
     }
 }

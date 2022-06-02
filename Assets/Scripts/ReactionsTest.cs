@@ -9,7 +9,7 @@ public class ReactionsTest : MonoBehaviour
 	public string react;
 
     void OnTriggerEnter(Collider other){
-	    flask.GetComponent<Substance>().reactWith(this.react,1f);
+	    flask.GetComponent<Substance>().ReactWith(this.react,1f);
     }
 
 

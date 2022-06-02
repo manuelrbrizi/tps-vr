@@ -32,24 +32,20 @@ public class RigidBodyMovement : MonoBehaviour
      }
 
     private void OnAgarrar(InputValue value){
-        Debug.Log("Grabbing");
 	    Grab();
     }
 
     private void OnCaminar(InputValue value){
-        Debug.Log("Caminando");
 	    _mov = value.Get<Vector2>();
 	    moveInput = new Vector3(_mov.x, 0, _mov.y);
 	    footStep(_mov);
     }
 
     private void OnMirar(InputValue value){
-        Debug.Log("mirando");
 	    _look = value.Get<Vector2>();
     }
 
     private void OnRotar(InputValue value){
-        Debug.Log("Rotando");
         if(holdingSomething) holdingObject.SendMessage("RotateObject"); //quickfix, en realidad habría que cambiar el actionmap
     }
 

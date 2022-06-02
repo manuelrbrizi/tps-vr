@@ -4,7 +4,7 @@ Shader "Unlit/SpecialFX/Liquid"
     {
 		_Tint ("Tint", Color) = (1,1,1,1)
 		_MainTex ("Texture", 2D) = "white" {}
-        _FillAmount ("Fill Amount", Range(-10,10)) = 0.0
+        _FillAmount ("Fill Amount", Range(0.44,0.56)) = 0.0
 		[HideInInspector] _WobbleX ("WobbleX", Range(-1,1)) = 0.0
 		[HideInInspector] _WobbleZ ("WobbleZ", Range(-1,1)) = 0.0
         _TopColor ("Top Color", Color) = (1,1,1,1)
@@ -83,7 +83,7 @@ Shader "Unlit/SpecialFX/Liquid"
 			// combine rotations with worldPos, based on sine wave from script
 			float3 worldPosAdjusted = worldPos + (worldPosX  * _WobbleX)+ (worldPosZ* _WobbleZ); 
 			// how high up the liquid is
-			o.fillEdge =  worldPosAdjusted.y + _FillAmount;
+			o.fillEdge =  worldPosAdjusted.y + (1 - _FillAmount);
  
 			o.viewDir = normalize(ObjSpaceViewDir(v.vertex));
             o.normal = v.normal;
