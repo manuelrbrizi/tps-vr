@@ -12259,7 +12259,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1303190980847660, guid: a82a87e68ab906d4bbf876f687e2a155, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1540040260711024, guid: a82a87e68ab906d4bbf876f687e2a155, type: 3}
       propertyPath: m_Name
@@ -34774,6 +34774,7 @@ GameObject:
   - component: {fileID: 2144064668}
   - component: {fileID: 2144064670}
   - component: {fileID: 2144064666}
+  - component: {fileID: 2144064671}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -34826,6 +34827,7 @@ MonoBehaviour:
   moveSpeed: 3
   rotationRate: 3
   camera: {fileID: 1219726224}
+  playerInput: {fileID: 2144064671}
 --- !u!82 &2144064668
 AudioSource:
   m_ObjectHideFlags: 0
@@ -34938,6 +34940,52 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!114 &2144064671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144064664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 056565c3a32081748875f56823bc2c70, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0c716312-44cf-438c-805e-5369478081ba
+    m_ActionName: caminando/Caminar[/XInputControllerWindows/leftStick,/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 678be993-a8bc-4010-bc81-2567a837c37a
+    m_ActionName: caminando/Agarrar[/ShanWan PC PS3 Android/button4,/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e8fb8100-f6f5-481b-a895-8368154bf32e
+    m_ActionName: caminando/Mirar[/XInputControllerWindows/rightStick,/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 75df551f-d1f8-4a63-93fe-243565d1281d
+    m_ActionName: agarrando/rotar[/XInputControllerWindows/buttonEast,/Mouse/rightButton]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: caminando
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!33 &86508832367006768
 MeshFilter:
   m_ObjectHideFlags: 0

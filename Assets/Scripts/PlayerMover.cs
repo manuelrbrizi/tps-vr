@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMover : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PlayerMover : MonoBehaviour
     public float rotationSpeed = 2.5f;
     private bool playingFootstep;
     private AudioSource footstep;
+    [SerializeField] private PlayerInput playerInput;
 
     // Start is called before the first frame update
     void Start()
