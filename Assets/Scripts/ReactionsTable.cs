@@ -1,39 +1,49 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ReactionsTable : MonoBehaviour
 {
+	private static Dictionary<string, Dictionary<string, string>> _reactionsTable = Initialize();
 
-	public Dictionary<string, Dictionary<string, string>> reactionsTable;
-	public Dictionary<string, Color[]> colorTable;
-
-
-    // Start is called before the first frame update
-    void Start()
+	/*
+	  Every reaction is stored in the dictionary, using the substance name as key and another
+	  dictionary using other substance name as key and result substance as value
+	*/
+	static Dictionary<string, Dictionary<string, string>> Initialize()
     {
-	//building dicts
-	this.reactionsTable = new Dictionary<string, Dictionary<string, string>>();
-	this.colorTable = new Dictionary<string, Color[]>();
-	//testing puporses, setting up water
-	Dictionary<string, string> waterDict = new Dictionary<string, string>();
-	waterDict["NaCl"] = "aguita";
-	waterDict["Na"] = "boom";
-	colorTable.Add("aguita", new Color[]{ new Color(0.6f, 0.1f, 0.4f, 1), new Color(0.4f, 0.1f, 0.6f, 1)});
-        this.reactionsTable["water"] = waterDict;
+		// Instantiate dictionaries
+		_reactionsTable = new Dictionary<string, Dictionary<string, string>>();
+
+		// Water dictionaries
+		var waterDict = new Dictionary<string, string>
+		{
+			["Sodium"] = "Boom",
+			["Uranium"] = "Cold Uranium"
+		};
+
+		// Sodium dictionaries
+		var sodiumDict = new Dictionary<string, string>
+		{
+			["Water"] = "Boom",
+			["Uranium"] = "Cold Uranium"
+		};
+
+		// Uranium dictionaries
+		var uraniumDict = new Dictionary<string, string>
+		{
+			["Sodium"] = "Boom",
+			["Water"] = "Cold Uranium"
+		};
+
+		// Adding dictionaries to reaction table
+		_reactionsTable["Water"] = waterDict;
+		_reactionsTable["Uranium"] = uraniumDict;
+		_reactionsTable["Sodium"] = sodiumDict;
+
+		return _reactionsTable;
     }
 
-    public Dictionary<string, string> getReactionsFor(string substance){
-	    return this.reactionsTable[substance];
+    public static Dictionary<string, string> GetReactionsFor(string substance){
+	    return _reactionsTable[substance];
     }
-
-    public Color[] getSubstanceColorOf(string substance){
-	    //hardcoded, should go away
-	    if(substance == "water"){
-		return new Color[]{ new Color(50, 140, 180), new Color(136, 255, 247)};
-		
-	    }
-	    return this.colorTable[substance];
-    }
-
 }

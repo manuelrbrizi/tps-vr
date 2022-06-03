@@ -9,7 +9,7 @@ public class RigidBodyMovement : MonoBehaviour
     // Variables and Camera
     public float moveSpeed = 0.25f;
     public float rotationRate = 5f;
-    public Camera camera;
+    public Camera _camera;
     
     // Auxiliars
     private bool playingFootstep;
@@ -52,14 +52,14 @@ public class RigidBodyMovement : MonoBehaviour
  
      private void FixedUpdate()
      {
-         var lastAngle = camera.transform.localRotation;
+         var lastAngle = _camera.transform.localRotation;
          Vector3 moveVector = transform.TransformDirection(new Vector3(_mov.x, 0, _mov.y)) * moveSpeed;
          _rigidBody.velocity = new Vector3(moveVector.x, _rigidBody.velocity.y, moveVector.z);
          var pos = transform.position;
          transform.position = new Vector3(pos.x, 1.68f, pos.z);
-         var xRot = camera.transform.localRotation.x;
-         camera.transform.Rotate(new Vector3(- _look.y * rotationRate, 0f, 0f));   
-         if ((xRot < -0.5 && _look.y < 0) || (xRot > 0.65 && _look.y > 0))  camera.transform.localRotation = lastAngle;
+         var xRot = _camera.transform.localRotation.x;
+         _camera.transform.Rotate(new Vector3(- _look.y * rotationRate, 0f, 0f));   
+         if ((xRot < -0.5 && _look.y < 0) || (xRot > 0.65 && _look.y > 0))  _camera.transform.localRotation = lastAngle;
          transform.Rotate(0f,  _look.x * rotationRate, 0f);
      }
 
@@ -95,7 +95,7 @@ public class RigidBodyMovement : MonoBehaviour
      {
          RaycastHit hit;
         
-         if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, 3f))
+         if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 3f))
          {
              if (!holdingSomething && hit.transform.tag.Contains("WorkingTool"))
              {

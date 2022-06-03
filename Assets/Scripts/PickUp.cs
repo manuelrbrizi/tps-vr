@@ -8,9 +8,8 @@ public class PickUp : MonoBehaviour
     public AudioSource grabbingSound;
     public AudioSource ungrabbingSound;
     public Transform destination;
-    public Transform mainCamera;
-	
-	public float _rotationAngle = -60;
+    public float rotationAngle = -60;
+    public Recipient recipient;
     
     private Rigidbody _rigidBody;
     private BoxCollider _boxCollider;
@@ -23,7 +22,7 @@ public class PickUp : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody>();
         _boxCollider = GetComponent<BoxCollider>();
-	_particles = GetComponentInChildren<ParticleSystem>();
+		_particles = GetComponentInChildren<ParticleSystem>();
         _grabbed = false;
         _rotated = false;
         _justRotated = true;
@@ -46,7 +45,7 @@ public class PickUp : MonoBehaviour
 		if(_rotated){
 			_rotated = !_rotated;
 			transform.rotation = Quaternion.identity;
-			this._particles.Stop(true);
+			_particles.Stop(true);
 		}
         _grabbed = false;
         _boxCollider.enabled = true;
@@ -59,26 +58,32 @@ public class PickUp : MonoBehaviour
     public void RotateObject()
     {
         _rotated = !_rotated;
-		interactWithSubstance();
+        if (_rotated)
+        {
+	        recipient.StartPouring();
+	        InteractWithSubstance();
+        }
+        else
+        {
+	        recipient.StopPouring();
+        }
     }
 
-	private void interactWithSubstance(){
-		Vector3 raycastDir = new Vector3(0,-0.5f,-0.1f);
-		Debug.DrawRay(transform.position,  raycastDir * 1f, Color.red, 2);
+	private void InteractWithSubstance()
+	{
+		Vector3 raycastDir = new Vector3(0,-1f,0f);
+		var sanitizedPosition = transform.position;
+		sanitizedPosition.y = 1.4f;
+		Debug.DrawRay(sanitizedPosition,  raycastDir * 1f, Color.red, 30);
 		RaycastHit hit;
-		if(Physics.Raycast(transform.position, raycastDir * 1f, out hit, 1f)){
-			if(hit.collider.isTrigger && hit.collider.gameObject.tag == "Substance"){
-				//get this object's component
+		
+		if(Physics.Raycast(sanitizedPosition, raycastDir * 1f, out hit, 2f)){
+			if(hit.collider.isTrigger && hit.collider.gameObject.CompareTag("Substance")){
 				Substance sub = GetComponent<Substance>();
-				//if no substance on reactive, ignore
-				if(sub.amount == 0){
-					Debug.Log("No amount to react");
-					return;
-				}
 				//react with container's substance
 				hit.collider.gameObject.SendMessage("ReactWith", sub);
 				//empty bottle
-				sub.changeSubstanceAmount(-99f);
+				//sub.ChangeSubstanceAmount(-99f);
 			}
 		}
 	}
@@ -87,16 +92,18 @@ public class PickUp : MonoBehaviour
     void Update()
     {
         if (!_grabbed) return;
+        
         if (_rotated && _justRotated) {
-			transform.Rotate(new Vector3(_rotationAngle,_rotationAngle + 45,_rotationAngle), Space.World);
+			transform.Rotate(new Vector3(rotationAngle,rotationAngle + 45,rotationAngle), Space.World);
             _justRotated = false;
-	    this._particles.Play(true);
-        } else if(!_rotated)
-        {
+			_particles.Play(true);
+        } 
+        else if(!_rotated) {
             transform.rotation = Quaternion.identity;
             _justRotated = true;
-	    this._particles.Stop(true);
+			_particles.Stop(true);
         }
+        
         transform.position = destination.position;
     }
 }
