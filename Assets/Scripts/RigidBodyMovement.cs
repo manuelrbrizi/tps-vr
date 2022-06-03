@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class RigidBodyMovement : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class RigidBodyMovement : MonoBehaviour
     public float moveSpeed = 0.25f;
     public float rotationRate = 5f;
     public Camera _camera;
+    public Text objectText;
     
     // Auxiliars
     private bool playingFootstep;
@@ -61,8 +63,25 @@ public class RigidBodyMovement : MonoBehaviour
          _camera.transform.Rotate(new Vector3(- _look.y * rotationRate, 0f, 0f));   
          if ((xRot < -0.5 && _look.y < 0) || (xRot > 0.65 && _look.y > 0))  _camera.transform.localRotation = lastAngle;
          transform.Rotate(0f,  _look.x * rotationRate, 0f);
+         SetObjectText();
      }
 
+     private void SetObjectText()
+     {
+         RaycastHit hit;
+        
+         if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 2f))
+         {
+             if (hit.transform.tag.Contains("WorkingTool"))
+             {
+                 objectText.text = hit.transform.GetComponent<Substance>().SubstanceName;
+             }
+             else
+             {
+                 objectText.text = "";
+             }
+         }
+     }
 
     private void footStep(Vector2 vec) {
          if (!playingFootstep && (_mov.x != 0 || _mov.y != 0))
