@@ -113,7 +113,7 @@ public class RigidBodyMovement : MonoBehaviour
      private void Grab()
      {
          RaycastHit hit;
-        
+         
          if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 3f))
          {
              if (!holdingSomething && hit.transform.tag.Contains("WorkingTool"))
@@ -125,6 +125,15 @@ public class RigidBodyMovement : MonoBehaviour
              else if (holdingSomething && hit.transform.tag.Contains("Desk"))
              {
                  holdingObject.SendMessage("UngrabObject", hit.point);
+                 holdingObject = null;
+                 holdingSomething = false;
+             }
+             else if (holdingSomething && holdingObject.transform.name.Contains("Copper") && hit.transform.name.Contains("recipient"))
+             {
+                 holdingObject.SendMessage("UngrabObject", hit.point);
+                 var selfSubstance = holdingObject.GetComponent<Substance>();
+                 var recipientSubstance = selfSubstance.recipient.GetComponentInChildren<Substance>();
+                 recipientSubstance.SendMessage("ReactWith", selfSubstance);
                  holdingObject = null;
                  holdingSomething = false;
              }

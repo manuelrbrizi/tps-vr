@@ -9,11 +9,14 @@ public class Recipient : MonoBehaviour
     public AudioSource pouring;
     public AudioSource heavyBubbling;
     public AudioSource explosionSound;
+    public AudioSource steamSound;
     public ParticleSystem explosion;
+    public ParticleSystem steam;
 
     private void Start()
     {
         explosion.Stop();
+        steam.Stop();
     }
 
     public void StartBubbling()
@@ -41,6 +44,11 @@ public class Recipient : MonoBehaviour
         StartCoroutine(Explosion());
     }
 
+    public void Steam(GameObject coin)
+    {
+        StartCoroutine(SteamRecipient(coin));
+    }
+
     private IEnumerator Explosion()
     {
         heavyBubbling.Play();
@@ -50,6 +58,18 @@ public class Recipient : MonoBehaviour
         explosion.Play();
         yield return new WaitForSeconds(1.1f);
         explosion.Stop();
-        
+    }
+    
+    private IEnumerator SteamRecipient(GameObject coin)
+    {
+        heavyBubbling.Play();
+        yield return new WaitForSeconds(2f);
+        steamSound.Play();
+        steam.Play();
+        yield return new WaitForSeconds(8f);
+        heavyBubbling.Stop();
+        steam.Stop();
+        steamSound.Stop();
+        Destroy(coin);
     }
 }

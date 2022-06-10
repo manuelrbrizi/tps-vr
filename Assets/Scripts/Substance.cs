@@ -14,6 +14,9 @@ public class Substance : MonoBehaviour {
 	
 	// Color dictionary
 	private Dictionary<string, Color[]> _colorTable;
+	
+	// Helpful refs
+	private GameObject _copperCoin;
 
 	private const float rangeSteps = 5;
 	//amuont must be between 0.44 and 0.56 because of shaderd's implementation
@@ -32,7 +35,7 @@ public class Substance : MonoBehaviour {
 		{
 			particleRenderer = GetComponent<ParticleSystemRenderer>();
 		}
-		else
+		else if(SubstanceName != "Copper")
 		{
 			particleRenderer = GetComponentInChildren<ParticleSystemRenderer>();
 			ChangeSubstanceColor();
@@ -47,6 +50,8 @@ public class Substance : MonoBehaviour {
 		_colorTable.Add("Water", new []{new Color(0.72f, 0.88f, 0.93f, 1), new Color(0.72f, 0.88f, 0.93f, 1)});
 		_colorTable.Add("Uranium", new []{new Color(0.03f, 1f, 0f, 1), new Color(0.03f, 1f, 0f, 1)});
 		_colorTable.Add("Cold Uranium", new []{new Color(0.2f, 0.59f, 0.19f, 1), new Color(0.2f, 0.59f, 0.19f, 1)});
+		_colorTable.Add("Nitric Acid", new []{new Color(0f, 0.6845f, 1f, 1), new Color(0f, 0.6845f, 1f, 1)});
+		_colorTable.Add("Steam", new []{new Color(0f, 0.6845f, 1f, 1), new Color(0f, 0.6845f, 1f, 1)});
 	}
 
 	public void ReactWith(Substance other){
@@ -54,18 +59,29 @@ public class Substance : MonoBehaviour {
 		if (SubstanceName == "Void")
 		{
 			SubstanceName = other.SubstanceName;
+			Debug.Log("First substance: " + SubstanceName);
+			
+			if (other.SubstanceName.Equals("Copper"))
+			{
+				_copperCoin = other.gameObject;
+				return;
+			}
+			
 			ChangeSubstanceAmount(other.SubstanceAmount);
 			ChangeSubstanceColor();
-			Debug.Log("First substance: " + SubstanceName);
 			return;
 		}
 		
 		Debug.Log(SubstanceName + " + " + other.SubstanceName);
 		
-		// If its the same substance, add amount
-		if(other.SubstanceName == SubstanceName){
-			ChangeSubstanceAmount(other.SubstanceAmount);
-			return;
+		// If its the same substance, add amount and return
+		ChangeSubstanceAmount(other.SubstanceAmount);
+		if (other.SubstanceName == SubstanceName) return;
+
+		// If it's a copper coin, save gameObject
+		if (other.SubstanceName.Contains("Copper"))
+		{
+			_copperCoin = other.gameObject;
 		}
 		
 		// Get possible reactions for this substance
@@ -77,6 +93,9 @@ public class Substance : MonoBehaviour {
 		
 		// If nothing happens, return
 		if(newSubstance == SubstanceName) return;
+		
+		// Save new substance
+		SubstanceName = newSubstance;
 
 		switch (newSubstance)
 		{
@@ -93,12 +112,18 @@ public class Substance : MonoBehaviour {
 				StartCoroutine(RestartAfter(10f));
 				break;
 			
+			// Steam everything!
+			case "Steam":
+				recipient.Steam(_copperCoin);
+				ChangeSubstanceColor();
+				StartCoroutine(RestartAfter(10.3f));
+				return;
+			
 			// If reaction generates nothing, just return 
 			case null:
 				return;
 		}
-
-		SubstanceName = newSubstance;
+		
 		ChangeSubstanceColor();
 		ChangeSubstanceAmount(other.SubstanceAmount);
 	}

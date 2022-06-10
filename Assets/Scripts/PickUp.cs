@@ -74,7 +74,6 @@ public class PickUp : MonoBehaviour
 		Vector3 raycastDir = new Vector3(0,-1f,0f);
 		var sanitizedPosition = transform.position;
 		sanitizedPosition.y = 1.4f;
-		Debug.DrawRay(sanitizedPosition,  raycastDir * 1f, Color.red, 30);
 		RaycastHit hit;
 		
 		if(Physics.Raycast(sanitizedPosition, raycastDir * 1f, out hit, 2f)){
@@ -92,18 +91,21 @@ public class PickUp : MonoBehaviour
     void Update()
     {
         if (!_grabbed) return;
-        
-        if (_rotated && _justRotated) {
-			transform.Rotate(new Vector3(rotationAngle,rotationAngle + 45,rotationAngle), Space.World);
-            _justRotated = false;
-			_particles.Play(true);
-        } 
-        else if(!_rotated) {
-            transform.rotation = Quaternion.identity;
-            _justRotated = true;
-			_particles.Stop(true);
+
+        if (_particles != null)
+        {
+	        if (_rotated && _justRotated) {
+		        transform.Rotate(new Vector3(rotationAngle,rotationAngle + 45,rotationAngle), Space.World);
+		        _justRotated = false;
+		        _particles.Play(true);
+	        } 
+	        else if(!_rotated) {
+		        transform.rotation = Quaternion.identity;
+		        _justRotated = true;
+		        _particles.Stop(true);
+	        }
         }
-        
+
         transform.position = destination.position;
     }
 }

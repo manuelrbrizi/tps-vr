@@ -34,11 +34,23 @@ public class ReactionsTable : MonoBehaviour
 			["Sodium"] = "Boom",
 			["Water"] = "Cold Uranium"
 		};
+		
+		var nitricAcidDict = new Dictionary<string, string>
+		{
+			["Copper"] = "Steam"
+		};
+		
+		var copperDict = new Dictionary<string, string>
+		{
+			["Nitric Acid"] = "Steam"
+		};
 
 		// Adding dictionaries to reaction table
 		_reactionsTable["Water"] = waterDict;
 		_reactionsTable["Uranium"] = uraniumDict;
 		_reactionsTable["Sodium"] = sodiumDict;
+		_reactionsTable["Nitric Acid"] = nitricAcidDict;
+		_reactionsTable["Copper"] = copperDict;
 
 		return _reactionsTable;
     }
