@@ -24,14 +24,16 @@ public class ReactionsTable : MonoBehaviour
 		
 		var calciumDict = new Dictionary<string, string>
 		{
-			["Water"] = "White Steam"
+			["Water"] = "White Steam",
+			["Sodium"] = "Fire"
 		};
 
 		// Sodium dictionaries
 		var sodiumDict = new Dictionary<string, string>
 		{
 			["Water"] = "Boom",
-			["Uranium"] = "Cold Uranium"
+			["Uranium"] = "Cold Uranium",
+			["Calcium"] = "Fire"
 		};
 
 		// Uranium dictionaries

@@ -125,6 +125,11 @@ public class Substance : MonoBehaviour {
 				StartCoroutine(RestartAfter(10.3f));
 				return;
 			
+			case "Fire":
+				recipient.Fire();
+				StartCoroutine(RestartAfter(12f));
+				return;
+			
 			// If reaction generates nothing, just return 
 			case null:
 				return;
