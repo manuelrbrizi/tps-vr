@@ -52,6 +52,7 @@ public class Substance : MonoBehaviour {
 		_colorTable.Add("Cold Uranium", new []{new Color(0.2f, 0.59f, 0.19f, 1), new Color(0.2f, 0.59f, 0.19f, 1)});
 		_colorTable.Add("Nitric Acid", new []{new Color(0f, 0.6845f, 1f, 1), new Color(0f, 0.6845f, 1f, 1)});
 		_colorTable.Add("Steam", new []{new Color(0f, 0.6845f, 1f, 1), new Color(0f, 0.6845f, 1f, 1)});
+		_colorTable.Add("Calcium", new []{new Color(0.14f, 0.28f, 0.35f, 1), new Color(0.14f, 0.28f, 0.35f, 1)});
 	}
 
 	public void ReactWith(Substance other){
@@ -116,6 +117,11 @@ public class Substance : MonoBehaviour {
 			case "Steam":
 				recipient.Steam(_copperCoin);
 				ChangeSubstanceColor();
+				StartCoroutine(RestartAfter(10.3f));
+				return;
+			
+			case "White Steam":
+				recipient.Steam();
 				StartCoroutine(RestartAfter(10.3f));
 				return;
 			

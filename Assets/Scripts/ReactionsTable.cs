@@ -18,7 +18,13 @@ public class ReactionsTable : MonoBehaviour
 		var waterDict = new Dictionary<string, string>
 		{
 			["Sodium"] = "Boom",
-			["Uranium"] = "Cold Uranium"
+			["Uranium"] = "Cold Uranium",
+			["Calcium"] = "White Steam"
+		};
+		
+		var calciumDict = new Dictionary<string, string>
+		{
+			["Water"] = "White Steam"
 		};
 
 		// Sodium dictionaries
@@ -51,6 +57,7 @@ public class ReactionsTable : MonoBehaviour
 		_reactionsTable["Sodium"] = sodiumDict;
 		_reactionsTable["Nitric Acid"] = nitricAcidDict;
 		_reactionsTable["Copper"] = copperDict;
+		_reactionsTable["Calcium"] = calciumDict;
 
 		return _reactionsTable;
     }
