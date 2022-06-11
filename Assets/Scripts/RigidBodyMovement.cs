@@ -137,6 +137,14 @@ public class RigidBodyMovement : MonoBehaviour
                  holdingObject = null;
                  holdingSomething = false;
              }
+             else if(!holdingSomething && hit.transform.tag.Contains("Tape"))
+             {
+                 hit.transform.gameObject.GetComponent<Tape>().Action();
+             }
+             else if(!holdingSomething && hit.transform.tag.Contains("Burner"))
+             {
+                 hit.transform.gameObject.GetComponent<Burner>().Action();
+             }
          }
      }
 }

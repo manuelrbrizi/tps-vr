@@ -8,6 +8,8 @@ TagManager:
   - WorkingTool
   - Desk
   - Substance
+  - Tape
+  - Burner
   layers:
   - Default
   - TransparentFX
