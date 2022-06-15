@@ -12,7 +12,7 @@ public class Burner : MonoBehaviour
     void Start()
     {
         _burning = false;
-        fire.Stop();
+        fire.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
 
     public void Action()
@@ -21,7 +21,7 @@ public class Burner : MonoBehaviour
         {
             _burning = false;
             burnerSound.Stop();
-            fire.Stop();
+            fire.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
         else
         {

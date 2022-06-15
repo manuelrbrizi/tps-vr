@@ -11,15 +11,18 @@ public class Recipient : MonoBehaviour
     public AudioSource explosionSound;
     public AudioSource steamSound;
     public AudioSource fireSound;
+    public AudioSource fireFliesSound;
     public ParticleSystem explosion;
     public ParticleSystem steam;
     public ParticleSystem fire;
+    public ParticleSystem fireFlies;
 
     private void Start()
     {
+        fireFlies.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         explosion.Stop();
         steam.Stop();
-        fire.Stop();
+        fire.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
 
     public void StartBubbling()
@@ -60,6 +63,11 @@ public class Recipient : MonoBehaviour
     public void Fire()
     {
         StartCoroutine(StartFire());
+    }
+
+    public void DoMagic()
+    {
+        StartCoroutine(StartMagic());
     }
 
     private IEnumerator Explosion()
@@ -113,5 +121,17 @@ public class Recipient : MonoBehaviour
         fireSound.Stop();
         heavyBubbling.Stop();
         heavyBubbling.volume = 0.6f;
+    }
+    
+    private IEnumerator StartMagic()
+    {
+        heavyBubbling.Play();
+        yield return new WaitForSeconds(3f);
+        heavyBubbling.Stop();
+        fireFlies.Play();
+        fireFliesSound.Play();
+        yield return new WaitForSeconds(12f);
+        fireFlies.Stop();
+        fireFliesSound.Stop();
     }
 }

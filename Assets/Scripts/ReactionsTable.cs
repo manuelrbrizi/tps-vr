@@ -52,6 +52,39 @@ public class ReactionsTable : MonoBehaviour
 		{
 			["Nitric Acid"] = "Steam"
 		};
+		
+		var sugarDict = new Dictionary<string, string>
+		{
+			["Colors"] = "Substance SC",
+			["Flowers"] = "Substance SF"
+		}; 
+		
+		var flowersDict = new Dictionary<string, string>
+		{
+			["Colors"] = "Substance FC",
+			["Sugar"] = "Substance SF"
+		}; 
+		
+		var colorsDict = new Dictionary<string, string>
+		{
+			["Sugar"] = "Substance SC",
+			["Flowers"] = "Substance FC"
+		}; 
+		
+		var scDict = new Dictionary<string, string>
+		{
+			["Flowers"] = "Magic"
+		}; 
+		
+		var sfDict = new Dictionary<string, string>
+		{
+			["Colors"] = "Magic"
+		};
+		
+		var fcDict = new Dictionary<string, string>
+		{
+			["Sugar"] = "Magic"
+		};
 
 		// Adding dictionaries to reaction table
 		_reactionsTable["Water"] = waterDict;
@@ -60,6 +93,12 @@ public class ReactionsTable : MonoBehaviour
 		_reactionsTable["Nitric Acid"] = nitricAcidDict;
 		_reactionsTable["Copper"] = copperDict;
 		_reactionsTable["Calcium"] = calciumDict;
+		_reactionsTable["Flowers"] = flowersDict;
+		_reactionsTable["Colors"] = colorsDict;
+		_reactionsTable["Sugar"] = sugarDict;
+		_reactionsTable["Substance SF"] = sfDict;
+		_reactionsTable["Substance SC"] = scDict;
+		_reactionsTable["Substance FC"] = fcDict;
 
 		return _reactionsTable;
     }

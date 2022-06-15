@@ -53,6 +53,12 @@ public class Substance : MonoBehaviour {
 		_colorTable.Add("Nitric Acid", new []{new Color(0f, 0.6845f, 1f, 1), new Color(0f, 0.6845f, 1f, 1)});
 		_colorTable.Add("Steam", new []{new Color(0f, 0.6845f, 1f, 1), new Color(0f, 0.6845f, 1f, 1)});
 		_colorTable.Add("Calcium", new []{new Color(0.14f, 0.28f, 0.35f, 1), new Color(0.14f, 0.28f, 0.35f, 1)});
+		_colorTable.Add("Sugar", new []{new Color(1f, 1f, 1f, 1), new Color(1f, 1f, 1f, 1)});
+		_colorTable.Add("Flowers", new []{new Color(0.55f, 0.2f, 0.8f, 1), new Color(0.55f, 0.2f, 0.8f, 1)});
+		_colorTable.Add("Colors", new []{new Color(0.8f, 1f, 0.5f, 1), new Color(0.8f, 1f, 0.5f, 1)});
+		_colorTable.Add("Substance SF", new []{new Color(1f, 0f, 0.35f, 1), new Color(1f, 0f, 0.35f, 1)});
+		_colorTable.Add("Substance SC", new []{new Color(1f, 0f, 0.35f, 1), new Color(1f, 0f, 0.35f, 1)});
+		_colorTable.Add("Substance FC", new []{new Color(1f, 0f, 0.35f, 1), new Color(1f, 0f, 0.35f, 1)});
 	}
 
 	public void ReactWith(Substance other){
@@ -130,6 +136,18 @@ public class Substance : MonoBehaviour {
 				StartCoroutine(RestartAfter(12f));
 				return;
 			
+			case "Substance FC":
+			case "Substance SC":
+			case "Substance SF":
+				recipient.StartBubbling();
+				ChangeSubstanceColor();
+				return;
+			
+			case "Magic":
+				recipient.DoMagic();
+				StartCoroutine(RestartAfter(14f));
+				return;
+			
 			// If reaction generates nothing, just return 
 			case null:
 				return;
@@ -162,6 +180,7 @@ public class Substance : MonoBehaviour {
 		// Changing Material properties
 		flaskRenderer.material.SetColor("_Tint", newColor[0]);
 		flaskRenderer.material.SetColor("_TopColor", newColor[1]);
+		flaskRenderer.material.SetColor("_FoamLineColor", newColor[1]);
 		
 		// Also change particle's color
 		if (particleRenderer == null) return;

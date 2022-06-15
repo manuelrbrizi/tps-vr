@@ -90,7 +90,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Rim: 0.0027
+    - _Rim: 0
     - _RimPower: 0
     - _RotationSpeed: 2
     - _SmoothnessTextureChannel: 0
@@ -114,6 +114,6 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Tint: {r: 0.13995194, g: 0.28345513, b: 0.3490566, a: 1}
-    - _TopColor: {r: 0.79294235, g: 0.9716981, b: 0.9597089, a: 1}
+    - _Tint: {r: 1, g: 0, b: 0.34204102, a: 1}
+    - _TopColor: {r: 0.68284976, g: 0.8773585, b: 0.86467314, a: 1}
   m_BuildTextureStacks: []

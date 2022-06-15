@@ -48,7 +48,7 @@ public class RigidBodyMovement : MonoBehaviour
     }
 
     private void OnRotar(InputValue value){
-        if(holdingSomething) holdingObject.SendMessage("RotateObject"); //quickfix, en realidad habría que cambiar el actionmap
+        if(holdingSomething && !holdingObject.transform.name.Contains("Copper")) holdingObject.SendMessage("RotateObject"); //quickfix, en realidad habría que cambiar el actionmap
     }
 
  
@@ -144,6 +144,13 @@ public class RigidBodyMovement : MonoBehaviour
              else if(!holdingSomething && hit.transform.tag.Contains("Burner"))
              {
                  hit.transform.gameObject.GetComponent<Burner>().Action();
+             }
+             else if (!holdingSomething && hit.transform.tag.Contains("Cabinet"))
+             {
+                 var anim = hit.transform.GetComponentInParent<Animator>();
+                 hit.transform.GetComponentInParent<Animator>().SetBool("Close", anim.GetBool("Open"));
+                 hit.transform.GetComponentInParent<Animator>().SetBool("Open", !anim.GetBool("Open"));
+                 //hit.transform.GetComponent<Animator>().Play("Open");
              }
          }
      }
