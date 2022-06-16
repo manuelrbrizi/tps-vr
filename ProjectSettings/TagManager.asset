@@ -11,6 +11,7 @@ TagManager:
   - Tape
   - Burner
   - Cabinet
+  - Sink
   layers:
   - Default
   - TransparentFX

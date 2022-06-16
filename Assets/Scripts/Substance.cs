@@ -38,6 +38,7 @@ public class Substance : MonoBehaviour {
 		else if(SubstanceName != "Copper")
 		{
 			particleRenderer = GetComponentInChildren<ParticleSystemRenderer>();
+			if (SubstanceName.Equals("Empty")) return;
 			ChangeSubstanceColor();
 		}
 	}
@@ -59,12 +60,19 @@ public class Substance : MonoBehaviour {
 		_colorTable.Add("Substance SF", new []{new Color(1f, 0f, 0.35f, 1), new Color(1f, 0f, 0.35f, 1)});
 		_colorTable.Add("Substance SC", new []{new Color(1f, 0f, 0.35f, 1), new Color(1f, 0f, 0.35f, 1)});
 		_colorTable.Add("Substance FC", new []{new Color(1f, 0f, 0.35f, 1), new Color(1f, 0f, 0.35f, 1)});
+		_colorTable.Add("Obsolete Substance", new []{new Color(0.5f, 0.35f, 0.25f, 1), new Color(0.5f, 0.35f, 0.25f, 1)});
 	}
 
 	public void ReactWith(Substance other){
 		// Check if receipe is empty
 		if (SubstanceName == "Void")
 		{
+			// If empty with void, return
+			if (other.SubstanceName.Equals("Empty"))
+			{
+				return;
+			}
+			
 			SubstanceName = other.SubstanceName;
 			Debug.Log("First substance: " + SubstanceName);
 			
@@ -76,6 +84,18 @@ public class Substance : MonoBehaviour {
 			
 			ChangeSubstanceAmount(other.SubstanceAmount);
 			ChangeSubstanceColor();
+			return;
+		}
+
+		if (other.SubstanceName.Equals("Empty"))
+		{
+			other.SubstanceName = SubstanceName;
+			other.transform.Find("F_Liquid_05").gameObject.SetActive(true);
+			other.flaskRenderer = other.GetComponentsInChildren<MeshRenderer>()[1];
+			other.GetComponent<PickUp>().Fill();
+			other.ChangeSubstanceColor();
+			other.ChangeSubstanceAmount(15f);
+			ResetRecipient();
 			return;
 		}
 		
@@ -93,9 +113,10 @@ public class Substance : MonoBehaviour {
 		
 		// Get possible reactions for this substance
 		Dictionary<string, string> possibleReactions = ReactionsTable.GetReactionsFor(SubstanceName);
-		
+
 		// Get new substance from combination
-		var newSubstance = possibleReactions[other.SubstanceName];
+		var newSubstance = possibleReactions.ContainsKey(other.SubstanceName)? possibleReactions[other.SubstanceName] : "Obsolete Substance";
+		
 		Debug.Log("New substance is: " + newSubstance);
 		
 		// If nothing happens, return
@@ -110,7 +131,6 @@ public class Substance : MonoBehaviour {
 			case "Boom":
 				recipient.Explode();
 				StartCoroutine(RestartAfter(1.1f));
-				//ResetRecipient();
 				return;
 
 			// If reaction generated new substance, change this substance's name and color and do stuff
@@ -157,7 +177,7 @@ public class Substance : MonoBehaviour {
 		ChangeSubstanceAmount(other.SubstanceAmount);
 	}
 
-	private void ChangeSubstanceAmount(float amt) {
+	public void ChangeSubstanceAmount(float amt) {
 		if(amt > 0){
 			SubstanceAmount += amt;
 			//liquid overflow, for now, it is not possible,

@@ -17,15 +17,19 @@ public class PickUp : MonoBehaviour
     private bool _grabbed;
     private bool _rotated;
     private bool _justRotated;
-
+    private bool _playingFillingSound;
+    private bool _wasEmpty;
+    
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody>();
         _boxCollider = GetComponent<BoxCollider>();
-		_particles = GetComponentInChildren<ParticleSystem>();
+		_particles = transform.name.Contains("Empty")? null : GetComponentInChildren<ParticleSystem>();
         _grabbed = false;
         _rotated = false;
         _justRotated = true;
+        _playingFillingSound = false;
+        _wasEmpty = false;
     }
 
     public void GrabObject()
@@ -60,7 +64,11 @@ public class PickUp : MonoBehaviour
         _rotated = !_rotated;
         if (_rotated)
         {
-	        recipient.StartPouring();
+	        if (_particles != null)
+	        {
+		        recipient.StartPouring();
+	        }
+	        
 	        InteractWithSubstance();
         }
         else
@@ -84,6 +92,14 @@ public class PickUp : MonoBehaviour
 				//empty bottle
 				//sub.ChangeSubstanceAmount(-99f);
 			}
+			else if (hit.transform.gameObject.tag.Contains("Sink"))
+			{
+				Substance sub = GetComponent<Substance>();
+				sub.transform.Find("F_Liquid_05").gameObject.SetActive(false);
+				sub.SubstanceName = "Empty";
+				sub.ChangeSubstanceAmount(-99f);
+				StartCoroutine(NullifyParticles());
+			}
 		}
 	}
 
@@ -92,20 +108,47 @@ public class PickUp : MonoBehaviour
     {
         if (!_grabbed) return;
 
-        if (_particles != null)
-        {
-	        if (_rotated && _justRotated) {
-		        transform.Rotate(new Vector3(rotationAngle,rotationAngle + 45,rotationAngle), Space.World);
-		        _justRotated = false;
+        if (_rotated && _justRotated) {
+	        transform.Rotate(new Vector3(rotationAngle,rotationAngle + 45,rotationAngle), Space.World);
+	        _justRotated = false;
+	        if (_particles != null && !_wasEmpty)
+	        {
 		        _particles.Play(true);
-	        } 
-	        else if(!_rotated) {
-		        transform.rotation = Quaternion.identity;
-		        _justRotated = true;
-		        _particles.Stop(true);
 	        }
+        } 
+        else if(!_rotated) {
+	        transform.rotation = Quaternion.identity;
+	        if (_playingFillingSound)
+	        {
+		        transform.Find("Filling Sound").GetComponent<AudioSource>().Stop();
+		        _playingFillingSound = false;
+	        }
+	        if (_wasEmpty)
+	        {
+		        _wasEmpty = false;
+	        }
+	        if (_particles != null)
+	        {
+		        _particles.Stop(true); 
+	        }
+	        
+	        _justRotated = true;
         }
 
         transform.position = destination.position;
+    }
+
+    public void Fill()
+    {
+	    _particles = GetComponentInChildren<ParticleSystem>();
+	    _playingFillingSound = true;
+	    _wasEmpty = true;
+	    transform.Find("Filling Sound").GetComponent<AudioSource>().Play();
+    }
+
+    private IEnumerator NullifyParticles()
+    {
+	    yield return new WaitForSeconds(3f);
+	    _particles = null;
     }
 }
