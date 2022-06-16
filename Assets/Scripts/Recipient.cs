@@ -131,7 +131,7 @@ public class Recipient : MonoBehaviour
         fireFlies.Play();
         fireFliesSound.Play();
         yield return new WaitForSeconds(12f);
-        fireFlies.Stop();
+        fireFlies.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         fireFliesSound.Stop();
     }
 }

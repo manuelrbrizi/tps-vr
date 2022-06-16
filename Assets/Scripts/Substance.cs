@@ -200,10 +200,12 @@ public class Substance : MonoBehaviour {
 		// Changing Material properties
 		flaskRenderer.material.SetColor("_Tint", newColor[0]);
 		flaskRenderer.material.SetColor("_TopColor", newColor[1]);
-		flaskRenderer.material.SetColor("_FoamLineColor", newColor[1]);
 		
 		// Also change particle's color
 		if (particleRenderer == null) return;
+		var main = GetComponentInChildren<ParticleSystem>().main;
+		main.startColor = newColor[1];
+
 		Material m = Instantiate(particleRenderer.material);
 		m.SetColor("_Color", newColor[0]);
 		Destroy(particleRenderer.material);
