@@ -55,7 +55,6 @@ public class RigidBodyMovement : MonoBehaviour
      private void FixedUpdate()
      {
          //var lastAngle = _camera.transform.localRotation;
-         Debug.Log(transform.position);
          Vector3 moveVector = transform.TransformDirection(new Vector3(_mov.x, 0, _mov.y)) * moveSpeed;
          _rigidBody.velocity = new Vector3(moveVector.x, _rigidBody.velocity.y, moveVector.z);
          var pos = transform.position;

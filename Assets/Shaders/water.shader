@@ -16,13 +16,14 @@ Shader "Unlit/SpecialFX/Liquid"
  
     SubShader
     {
-        Tags {"Queue"="Geometry"  "DisableBatching" = "True" }
+        Tags {"Queue"="Transparent"  "DisableBatching" = "True" }
  
                 Pass
         {
-		 Zwrite On
+		 Zwrite off
 		 Cull Off // we want the front and back faces
-		 AlphaToMask On // transparency
+		 AlphaToMask off // transparency
+         Blend SrcAlpha OneMinusSrcAlpha
  
          CGPROGRAM
  
