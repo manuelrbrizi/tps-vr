@@ -18,29 +18,27 @@ public class ReactionsTable : MonoBehaviour
 		var waterDict = new Dictionary<string, string>
 		{
 			["Sodium solution"] = "Boom",
-			["Uranium"] = "Cold Uranium",
 			["Calcium solution"] = "White Steam"
 		};
 		
 		var calciumDict = new Dictionary<string, string>
 		{
 			["Water"] = "White Steam",
-			["Sodium solution"] = "Fire"
+			["Sodium solution"] = "Fire",
+			["Hydrogen peroxide"] = "Fast Steam"
 		};
 
 		// Sodium dictionaries
 		var sodiumDict = new Dictionary<string, string>
 		{
 			["Water"] = "Boom",
-			["Uranium"] = "Cold Uranium",
 			["Calcium solution"] = "Fire"
 		};
 
-		// Uranium dictionaries
-		var uraniumDict = new Dictionary<string, string>
+		// Hydrogen dictionaries
+		var hydrogenDict = new Dictionary<string, string>
 		{
-			["Sodium solution"] = "Boom",
-			["Water"] = "Cold Uranium"
+			["Calcium solution"] = "Fast Steam"
 		};
 		
 		var nitricAcidDict = new Dictionary<string, string>
@@ -88,7 +86,7 @@ public class ReactionsTable : MonoBehaviour
 
 		// Adding dictionaries to reaction table
 		_reactionsTable["Water"] = waterDict;
-		_reactionsTable["Uranium"] = uraniumDict;
+		_reactionsTable["Hydrogen peroxide"] = hydrogenDict;
 		_reactionsTable["Sodium solution"] = sodiumDict;
 		_reactionsTable["Nitric Acid"] = nitricAcidDict;
 		_reactionsTable["Copper"] = copperDict;

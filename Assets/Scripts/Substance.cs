@@ -48,9 +48,8 @@ public class Substance : MonoBehaviour {
 		_colorTable = new Dictionary<string, Color[]>{};
 		_colorTable.Add("Salt Water", new []{new Color(0.72f, 0.88f, 0.93f, 1), new Color(0.72f, 0.88f, 0.93f, 1)});
 		_colorTable.Add("Sodium solution", new []{Color.magenta, Color.magenta});
+		_colorTable.Add("Hydrogen peroxide", new []{Color.cyan, Color.cyan});
 		_colorTable.Add("Water", new []{new Color(0.72f, 0.88f, 0.93f, 1), new Color(0.72f, 0.88f, 0.93f, 1)});
-		_colorTable.Add("Uranium", new []{new Color(0.03f, 1f, 0f, 1), new Color(0.03f, 1f, 0f, 1)});
-		_colorTable.Add("Cold Uranium", new []{new Color(0.2f, 0.59f, 0.19f, 1), new Color(0.2f, 0.59f, 0.19f, 1)});
 		_colorTable.Add("Nitric Acid", new []{new Color(0.84f, 0.5f, 0.25f, 1), new Color(0.84f, 0.5f, 0.25f, 1)});
 		_colorTable.Add("Steam", new []{new Color(0f, 0.6845f, 1f, 1), new Color(0f, 0.6845f, 1f, 1)});
 		_colorTable.Add("Calcium solution", new []{new Color(0.14f, 0.28f, 0.35f, 1), new Color(0.14f, 0.28f, 0.35f, 1)});
@@ -133,12 +132,6 @@ public class Substance : MonoBehaviour {
 				StartCoroutine(RestartAfter(1.1f));
 				return;
 
-			// If reaction generated new substance, change this substance's name and color and do stuff
-			case "Cold Uranium":
-				recipient.StartBubbling();
-				StartCoroutine(RestartAfter(10f));
-				break;
-			
 			// Steam everything!
 			case "Steam":
 				recipient.Steam(_copperCoin);
@@ -166,6 +159,11 @@ public class Substance : MonoBehaviour {
 			case "Magic":
 				recipient.DoMagic();
 				StartCoroutine(RestartAfter(14f));
+				return;
+			
+			case "Fast Steam":
+				recipient.FastSteam();
+				StartCoroutine(RestartAfter(10.3f));
 				return;
 			
 			// If reaction generates nothing, just return 
