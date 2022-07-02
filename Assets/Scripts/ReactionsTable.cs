@@ -17,6 +17,7 @@ public class ReactionsTable : MonoBehaviour
 		// Water dictionaries
 		var waterDict = new Dictionary<string, string>
 		{
+			["Hydrogen peroxide"] = "Fog",
 			["Sodium solution"] = "Boom",
 			["Calcium solution"] = "White Steam"
 		};
@@ -38,6 +39,7 @@ public class ReactionsTable : MonoBehaviour
 		// Hydrogen dictionaries
 		var hydrogenDict = new Dictionary<string, string>
 		{
+			["Water"] = "Fog",
 			["Calcium solution"] = "Fast Steam"
 		};
 		

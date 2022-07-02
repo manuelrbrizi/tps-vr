@@ -17,6 +17,7 @@ public class Recipient : MonoBehaviour
     public ParticleSystem fire;
     public ParticleSystem fireFlies;
     public ParticleSystem fastSteam;
+    public ParticleSystem groundFog;
 
     private void Start()
     {
@@ -25,6 +26,7 @@ public class Recipient : MonoBehaviour
         steam.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         fire.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         fastSteam.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        groundFog.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
 
     public void StartBubbling()
@@ -65,6 +67,11 @@ public class Recipient : MonoBehaviour
     public void FastSteam()
     {
         StartCoroutine(FastSteamRecipient());
+    }
+    
+    public void Fog()
+    {
+        StartCoroutine(FogRecipient());
     }
 
     public void Fire()
@@ -152,5 +159,21 @@ public class Recipient : MonoBehaviour
         heavyBubbling.Stop();
         fastSteam.Stop();
         steamSound.Stop();
+    }
+    
+    private IEnumerator FogRecipient()
+    {
+        steam.startColor = new Color(0.72f, 0.88f, 0.93f, 1);
+        heavyBubbling.Play();
+        yield return new WaitForSeconds(2f);
+        steamSound.Play();
+        steam.Play();
+        yield return new WaitForSeconds(4f);
+        groundFog.Play();
+        yield return new WaitForSeconds(10f);
+        heavyBubbling.Stop();
+        steam.Stop();
+        steamSound.Stop();
+        groundFog.Stop();
     }
 }
