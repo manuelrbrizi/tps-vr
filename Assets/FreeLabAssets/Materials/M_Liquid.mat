@@ -114,6 +114,6 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Tint: {r: 0.5, g: 0.3499895, b: 0.23820755, a: 1}
+    - _Tint: {r: 0.8396226, g: 0.49151376, b: 0.2415895, a: 1}
     - _TopColor: {r: 0.68284976, g: 0.8773585, b: 0.86467314, a: 1}
   m_BuildTextureStacks: []

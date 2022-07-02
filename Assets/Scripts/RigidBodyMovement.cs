@@ -12,6 +12,7 @@ public class RigidBodyMovement : MonoBehaviour
     public float rotationRate = 5f;
     public Camera _camera;
     public Text objectText;
+    public StartLab labStarter;
     
     // Auxiliars
     private bool playingFootstep;
@@ -37,8 +38,10 @@ public class RigidBodyMovement : MonoBehaviour
 	    Grab();
     }
 
-    private void OnCaminar(InputValue value){
-	    _mov = value.Get<Vector2>();
+    private void OnCaminar(InputValue value)
+    {
+        if (labStarter.IsStarting()) return;
+        _mov = value.Get<Vector2>();
 	    moveInput = new Vector3(_mov.x, 0, _mov.y);
 	    footStep(_mov);
     }
@@ -54,6 +57,8 @@ public class RigidBodyMovement : MonoBehaviour
  
      private void FixedUpdate()
      {
+         if (labStarter.IsStarting()) return;
+
          //var lastAngle = _camera.transform.localRotation;
          Vector3 moveVector = transform.TransformDirection(new Vector3(_mov.x, 0, _mov.y)) * moveSpeed;
          _rigidBody.velocity = new Vector3(moveVector.x, _rigidBody.velocity.y, moveVector.z);
