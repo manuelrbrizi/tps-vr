@@ -218,6 +218,10 @@ public class Substance : MonoBehaviour {
 	private void ResetRecipient()
 	{
 		SubstanceName = "Void";
+		if (_copperCoin != null)
+		{
+			Destroy(_copperCoin);	
+		}
 		ChangeSubstanceAmount(-99f);
 	}
 
