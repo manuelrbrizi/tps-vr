@@ -18,7 +18,6 @@ public class RigidBodyMovement : MonoBehaviour
     private bool playingFootstep;
     private AudioSource footstep;
     private Rigidbody _rigidBody;
-    private Vector3 moveInput;
     private bool holdingSomething;
     private GameObject holdingObject;
     private Vector2 _mov;
@@ -42,12 +41,7 @@ public class RigidBodyMovement : MonoBehaviour
     {
         if (labStarter.IsStarting()) return;
         _mov = value.Get<Vector2>();
-	    moveInput = new Vector3(_mov.x, 0, _mov.y);
-	    footStep(_mov);
-    }
-
-    private void OnMirar(InputValue value){
-	    _look = value.Get<Vector2>();
+	footStep(_mov);
     }
 
     private void OnRotar(InputValue value){
@@ -58,16 +52,10 @@ public class RigidBodyMovement : MonoBehaviour
      private void FixedUpdate()
      {
          if (labStarter.IsStarting()) return;
-
-         //var lastAngle = _camera.transform.localRotation;
-         Vector3 moveVector = transform.TransformDirection(new Vector3(_mov.x, 0, _mov.y)) * moveSpeed;
+         Vector3 moveVector = _camera.transform.TransformDirection(new Vector3(_mov.x, 0, _mov.y)) * moveSpeed;
          _rigidBody.velocity = new Vector3(moveVector.x, _rigidBody.velocity.y, moveVector.z);
          var pos = transform.position;
          transform.position = new Vector3(pos.x, 1.68f, pos.z);
-         /*var xRot = _camera.transform.localRotation.x;
-         _camera.transform.Rotate(new Vector3(- _look.y * rotationRate, 0f, 0f));   
-         if ((xRot < -0.5 && _look.y < 0) || (xRot > 0.65 && _look.y > 0))  _camera.transform.localRotation = lastAngle;
-         transform.Rotate(0f,  _look.x * rotationRate, 0f);*/
          SetObjectText();
      }
 
