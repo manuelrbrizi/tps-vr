@@ -11,7 +11,6 @@ public class RigidBodyMovement : MonoBehaviour
     public float moveSpeed = 0.25f;
     public float rotationRate = 5f;
     public Camera _camera;
-    public Text objectText;
     public StartLab labStarter;
     
     // Auxiliars
@@ -47,8 +46,7 @@ public class RigidBodyMovement : MonoBehaviour
     private void OnRotar(InputValue value){
         if(holdingSomething && !holdingObject.transform.name.Contains("Copper")) holdingObject.SendMessage("RotateObject"); //quickfix, en realidad habría que cambiar el actionmap
     }
-
- 
+    
      private void FixedUpdate()
      {
          if (labStarter.IsStarting()) return;
@@ -56,27 +54,9 @@ public class RigidBodyMovement : MonoBehaviour
          _rigidBody.velocity = new Vector3(moveVector.x, _rigidBody.velocity.y, moveVector.z);
          var pos = transform.position;
          transform.position = new Vector3(pos.x, 1.68f, pos.z);
-         SetObjectText();
      }
 
-     private void SetObjectText()
-     {
-         RaycastHit hit;
-        
-         if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, 2f))
-         {
-             if (hit.transform.tag.Contains("WorkingTool"))
-             {
-                 objectText.text = hit.transform.GetComponent<Substance>().SubstanceName;
-             }
-             else
-             {
-                 objectText.text = "";
-             }
-         }
-     }
-
-    private void footStep(Vector2 vec) {
+     private void footStep(Vector2 vec) {
          if (!playingFootstep && (_mov.x != 0 || _mov.y != 0))
          {
              playingFootstep = true;
